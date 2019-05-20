@@ -177,7 +177,7 @@ func (client *OidcClient) Callback() http.HandlerFunc {
 					return
 				}
 				if err == ErrMissingOrganization {
-					http.Redirect(w, r, client.frontendUrl+"?missingcscorg=1", http.StatusFound)
+					http.Redirect(w, r, client.frontendUrl+"?missingorg=1", http.StatusFound)
 					return
 				}
 

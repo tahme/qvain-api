@@ -24,7 +24,7 @@ func (api *SessionApi) Current(w http.ResponseWriter, r *http.Request) {
 	session, err := api.sessions.SessionFromRequest(r)
 	if err != nil {
 		api.logger.Debug().Err(err).Msg("no current session")
-		jsonError(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		sessionError(w, sessions.ErrSessionNotFound)
 		return
 	}
 
@@ -44,8 +44,8 @@ func (api *SessionApi) Current(w http.ResponseWriter, r *http.Request) {
 func (api *SessionApi) Logout(w http.ResponseWriter, r *http.Request) {
 	sid, err := sessions.GetSessionCookie(r)
 	if err != nil {
-		api.logger.Debug().Err(err).Msg("no current session")
-		jsonError(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		api.logger.Debug().Err(err).Msg("no session cookie found")
+		sessionError(w, sessions.ErrSessionNotFound)
 		return
 	}
 	success := api.sessions.DestroyWithCookie(w, sid)

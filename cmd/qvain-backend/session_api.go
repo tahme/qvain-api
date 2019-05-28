@@ -50,8 +50,8 @@ func (api *SessionApi) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 	success := api.sessions.DestroyWithCookie(w, sid)
 	if !success {
-		api.logger.Debug().Err(err).Msg("failed to destroy session")
-		jsonError(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		api.logger.Debug().Msg("failed to destroy session")
+		sessionError(w, sessions.ErrSessionNotFound)
 		return
 	}
 
